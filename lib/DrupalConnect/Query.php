@@ -114,6 +114,7 @@ class Query
                 $response = $this->_httpClient->resetParameters(true)
                                               ->setUri($requestUrl)
                                               ->request('GET');
+                $this->_validateServerResponse($response);
 
                 $singleNode = json_decode($response->getBody(), true);
 
@@ -177,6 +178,8 @@ class Query
 
 
                 $response = $request->request('GET');
+
+                $this->_validateServerResponse($response);
 
                 $nodeSetData = (json_decode($response->getBody(), true));
 
@@ -244,6 +247,8 @@ class Query
 
             $response = $request->request('GET');
 
+            $this->_validateServerResponse($response);
+
             $nodeSetData = (json_decode($response->getBody(), true));
 
             if (!$nodeSetData || !is_array($nodeSetData))
@@ -286,6 +291,8 @@ class Query
                 }
 
                 $response = $request->request('GET');
+
+                $this->_validateServerResponse($response);
 
                 $singleFile = json_decode($response->getBody(), true);
 
@@ -349,6 +356,8 @@ class Query
 
 
                 $response = $request->request('GET');
+
+                $this->_validateServerResponse($response);
 
                 $nodeSetData = (json_decode($response->getBody(), true));
 
@@ -425,6 +434,8 @@ class Query
 
             $response = $request->request('GET');
 
+            $this->_validateServerResponse($response);
+
             $nodeSetData = (json_decode($response->getBody(), true));
 
             if (!$nodeSetData || !is_array($nodeSetData))
@@ -459,6 +470,8 @@ class Query
             $response = $this->_httpClient->resetParameters(true)
                                           ->setUri($requestUrl)
                                           ->request('GET');
+
+            $this->_validateServerResponse($response);
 
             $singleVocabulary = json_decode($response->getBody(), true);
 
@@ -523,6 +536,8 @@ class Query
 
             $response = $request->request('GET');
 
+            $this->_validateServerResponse($response);
+
             $vocabularySetData = (json_decode($response->getBody(), true));
 
             if (!$vocabularySetData || !is_array($vocabularySetData))
@@ -553,6 +568,8 @@ class Query
                 $response = $this->_httpClient->resetParameters(true)
                                               ->setUri($requestUrl)
                                               ->request('GET');
+
+                $this->_validateServerResponse($response);
 
                 $singleTerm = json_decode($response->getBody(), true);
 
@@ -616,6 +633,8 @@ class Query
 
 
                 $response = $request->request('GET');
+
+                $this->_validateServerResponse($response);
 
                 $termSetData = (json_decode($response->getBody(), true));
 
@@ -682,6 +701,9 @@ class Query
             }
 
             $response = $request->request('GET');
+
+            $this->_validateServerResponse($response);
+            
 
             $termSetData = (json_decode($response->getBody(), true));
 
@@ -815,4 +837,18 @@ class Query
         return $value;
     }
 
+    /**
+     * Checks for any server errors and throws the exception status code if 500 and
+     * displays the drupal under maintenance page when 503.
+     *
+     * @param $response \Zend_Http_Response
+     * @throws \DrupalConnect\Query\Exception
+     */
+    protected function _validateServerResponse($response)
+    {
+        if ($response->isError())
+        {
+            throw new \DrupalConnect\Connection\Exception($response->getMessage(), $response->getStatus());
+        }
+    }
 }
