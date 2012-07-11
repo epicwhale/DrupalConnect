@@ -36,11 +36,11 @@ class AbstractFieldSupport extends AbstractDocument
      *      )
      *
      * @param string $fieldName
-     * @param array $fieldData
+     * @param array|mixed $fieldData
      * @param array|null $options
      * @return Node
      */
-    public function addToField($fieldName, array $fieldData, array $options = null)
+    public function addToField($fieldName, $fieldData, array $options = null)
     {
         $lang = (is_array($options) && isset($options['language'])) ? $options['language'] : self::LANGUAGE_NONE;
 
@@ -58,7 +58,7 @@ class AbstractFieldSupport extends AbstractDocument
      * @param string $fieldName Name of the custom field
      * @param int|null $index Index of the field value to fetch
      * @param array|null $options Options like language, etc
-     * @return null|array|Field|Field[]
+     * @return null|array|mixed|Field|Field[]
      */
     public function getField($fieldName, $index = null, array $options = null)
     {
